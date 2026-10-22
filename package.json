@@ -1,6 +1,6 @@
 {
   "name": "@vectorchi/nuxt-fun-loader",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Rotating, playful loading messages for AI responses and other slow tasks, with only the themes you use in the bundle.",
   "repository": {
     "type": "git",
