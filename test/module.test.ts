@@ -5,7 +5,7 @@ import * as coreThemes from '@vectorchi/fun-loader/themes/index'
 import { describe, expect, it } from 'vitest'
 import FunLoaderModule, { THEMES } from '../src/module'
 
-const rootDir = fileURLToPath(new URL('./fixtures/basic', import.meta.url))
+const rootDir = fileURLToPath(new URL('./fixtures/baseline', import.meta.url))
 
 // Loads Nuxt with the module, without building, and returns what the module set up.
 async function setupModule(overrides: NuxtConfig = {}) {
