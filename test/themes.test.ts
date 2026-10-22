@@ -12,7 +12,8 @@ const markers = Object.values(others).map((theme) => {
   return line.slice(0, -1)
 })
 
-describe('tree-shaking', () => {
+// Each case is a full production build: about a second locally, much longer on CI runners.
+describe('tree-shaking', { timeout: 120_000 }, () => {
   it('ships only the listed themes', async () => {
     const js = (await buildClient('themes', 'thinking', { funLoader: { themes: ['thinking'] } })).join('\n')
     expect(js).toContain(thinking.messages.find(m => /^[\w ,.]+…$/.test(m))!.slice(0, -1))
