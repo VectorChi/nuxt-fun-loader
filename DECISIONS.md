@@ -54,3 +54,32 @@ Vue's `compilerOptions.isCustomElement` is a function, not a list. The module wr
 ## Setup tests use `loadNuxt`
 
 The guide says unit testing modules is still an open RFC and offers no helper. `test/module.test.ts` loads Nuxt with the module through `loadNuxt` (no build), reads the generated plugin's contents, calls `components:extend` to see the registered component, and checks `isCustomElement`. Each case takes well under a second.
+
+## No client-only wrapper
+
+The core element already loads on the server (it extends a plain class when `HTMLElement` is missing, and `define` skips without `customElements`). `test/ssr.test.ts` builds a fixture and checks that the page returns 200, that the server HTML carries the right attributes, and that the page hydrates in Chromium with no console warnings or errors. Messages also rotate, arrays reach the element as properties, and booleans switch on and off. So `<FunLoader>` renders on the server like any component: the tag and its attributes are in the HTML, and the shadow DOM fills in when the script runs.
+
+The hydration check was tested by planting a mismatch (`import.meta.server` in the template): the test failed with Vue's "Hydration text content mismatch" warning. The fixture turns on `__VUE_PROD_HYDRATION_MISMATCH_DETAILS__` so production builds report details.
+
+## Booleans are only passed when true
+
+The first SSR run rendered `paused="false" iconOnly="false" ordered="false"`. Vue's server renderer writes `false` as text for attributes it does not know, and the element treats any `paused` or `ordered` attribute as on, so every server-rendered loader started paused and ordered until hydration. The component now passes `paused`, `icon-only` and `ordered` only when true (`|| undefined`), using the element's attribute name `icon-only`. On the client Vue sets them as properties, so switching back to false works; the SSR test covers both directions.
+
+The core `/vue` component has the same bug; see CORE-REQUESTS.md.
+
+## Tree-shaking test and size
+
+`test/themes.test.ts` builds the `themes` fixture twice with `buildNuxt` and reads the client JavaScript. With `themes: ['thinking']`, one plain line from each of the seven other themes must be missing; with `'all'`, all seven must be present. Lines are compared without the trailing ellipsis, because the minifier may escape it.
+
+`npm run size` builds the same app with and without the module and reports the difference. Each build starts from empty folders, because leftover chunks from an earlier build were being counted twice. Measured on 2026-10-22 with core 0.5.0 and Nuxt 4.6.2:
+
+| Config | Minified | Gzip | Brotli |
+| --- | --- | --- | --- |
+| `themes: ['thinking']` | 8.62 kB | 2.76 kB | 2.54 kB |
+| `themes: 'all'` | 12.51 kB | 4.29 kB | 3.90 kB |
+
+These are differences of whole compressed builds, so they are close to, not exactly, what the loader's own code compresses to. They fit the core's own figures (2.3 kB for the element, 4.4 kB with all themes, brotli).
+
+## Browser for the E2E test
+
+`@nuxt/test-utils` drives Playwright. CI installs Playwright's Chromium. Locally, `CHROMIUM_PATH` can point at any installed Chromium-based browser, so nobody has to download one just to run the tests.

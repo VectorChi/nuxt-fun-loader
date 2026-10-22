@@ -2,6 +2,14 @@
 
 Changes in `@vectorchi/fun-loader` that would simplify this module. None of them block v0.1.0; each one says what the module does today.
 
+## 0. Bug: `/vue` renders `paused="false"` and `ordered="false"` on the server
+
+**Problem:** the Vue component passes `paused`, `iconOnly` and `ordered` as `false` when they are not set. Vue's server renderer writes those as text attributes (`paused="false"`, `iconOnly="false"`, `ordered="false"`), and the element treats any `paused` or `ordered` attribute as on. In a server-rendered app (Nuxt, or Vue SSR) every loader is paused and ordered until hydration sets the properties. Found by this module's SSR test, which rendered exactly that before the fix.
+
+**Ask:** in `src/vue/index.ts`, pass the booleans only when true and use the attribute name for icon-only: `paused: paused || undefined`, `'icon-only': iconOnly || undefined`, `ordered: ordered || shuffle === false || undefined`. Add an SSR test with `vue/server-renderer`'s `renderToString`.
+
+**Today:** the module's own component does this; see DECISIONS.md, "Booleans are only passed when true".
+
 ## 1. A Vue component that does not register every theme
 
 **Problem:** `@vectorchi/fun-loader/vue` calls `defineAll()` on import, so any app that imports it ships all eight themes. The module cannot limit themes and still use that component.

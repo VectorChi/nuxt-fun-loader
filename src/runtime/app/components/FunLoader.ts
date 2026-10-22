@@ -27,9 +27,18 @@ export default defineComponent({
   setup(props) {
     const defaults = inject(DEFAULTS_KEY, {})
     return () => {
+      const { paused, iconOnly, ordered, ...rest } = props
       // Drop unset props so the defaults, then the element's own, apply.
-      const set = Object.fromEntries(Object.entries(props).filter(([, v]) => v !== undefined))
-      return h('fun-loader', { ...defaults, ...set })
+      const set = Object.fromEntries(Object.entries(rest).filter(([, v]) => v !== undefined))
+      // The element treats any boolean attribute as on, and SSR would render `false` as
+      // paused="false". So booleans are only passed when true; icon-only is the attribute name.
+      return h('fun-loader', {
+        ...defaults,
+        ...set,
+        'paused': paused || undefined,
+        'icon-only': iconOnly || undefined,
+        'ordered': ordered || undefined,
+      })
     }
   },
 })
