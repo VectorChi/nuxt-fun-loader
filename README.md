@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/VectorChi/fun-loader/main/docs/public/logo-512.png" alt="fun-loader logo" width="80" height="80">
+
 # @vectorchi/nuxt-fun-loader
 
 [![npm](https://img.shields.io/npm/v/@vectorchi/nuxt-fun-loader)](https://www.npmjs.com/package/@vectorchi/nuxt-fun-loader)
