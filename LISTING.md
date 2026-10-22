@@ -48,8 +48,8 @@ The README says the description must not mention Nuxt or Nuxt versions. `package
 >
 > **A question about the name.** The package is scoped, `@vectorchi/nuxt-fun-loader`, to match the core package `@vectorchi/fun-loader`. The module author guide's ecosystem page describes scoped names (its example is `@my-company/nuxt-auth`) as typical of private or personal modules, and community modules as usually `nuxt-*`. Can a scoped community module be listed? If you'd prefer the unscoped `nuxt-fun-loader`, I can publish under that name too.
 >
-> Repo: <REPO_URL>
-> npm: <NPM_URL>
+> Repo: https://github.com/VectorChi/nuxt-fun-loader
+> npm: https://www.npmjs.com/package/@vectorchi/nuxt-fun-loader
 
 ## Still missing before the PR
 

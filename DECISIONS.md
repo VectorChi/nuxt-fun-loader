@@ -104,6 +104,8 @@ With those fixed, every step passes on Nuxt 4.0.3 and 4.6.2, including the playg
 
 Tried on 2026-10-22 in a fresh app from `nuxi init --template minimal` (Nuxt 4.6.2): `npx nuxi module add @vectorchi/nuxt-fun-loader` stops with "Failed to fetch package details for @vectorchi/nuxt-fun-loader. Request to registry.npmjs.org failed with status 404." That is expected: the command reads the package from npm, and nothing is published yet. There is nothing to fix in the module. Run it again after the first publish.
 
+Run again on 2026-10-22 after 0.1.1 was published: in a fresh Nuxt 4.6 app, `npx nuxi module add @vectorchi/nuxt-fun-loader` installed `^0.1.1` and added `'@vectorchi/nuxt-fun-loader'` to `modules`. It works.
+
 What the command would do, installing the package and adding it to `modules`, was checked by hand with the packed tarball (`npm pack`):
 
 - **npm:** the fresh app builds, and the server renders `<fun-loader theme="kitchen">` with `funLoader.themes: ['kitchen']` (the first listed theme became the default).
