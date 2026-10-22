@@ -117,4 +117,4 @@ The nuxt/modules README asks that a module's description not mention Nuxt or its
 
 ## First publish by hand; later ones from CI
 
-v0.1.0 was published from a laptop with `npm publish --provenance=false` on 2026-10-22, because trusted publishing can only be set up once a package exists. So 0.1.0 has no provenance. The release workflow skips the publish step when the tagged version is already on npm, so tagging `v0.1.0` to mark the release does not fail.
+v0.1.0 was published from a laptop with `npm publish --provenance=false` on 2026-10-22, because trusted publishing can only be set up once a package exists. So 0.1.0 has no provenance. The release workflow now skips the publish step when the tagged version is already on npm. That only helps tags on commits that contain the new step: 0.1.0 was published from `2ccb009`, whose workflow does not have it, so a `v0.1.0` tag there would fail at the publish step (harmlessly, since npm refuses to overwrite a version).
