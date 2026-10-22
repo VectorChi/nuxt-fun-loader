@@ -11,7 +11,7 @@ description: "Use fun-loader in Nuxt with the @vectorchi/nuxt-fun-loader module:
 npx nuxi module add @vectorchi/nuxt-fun-loader
 ```
 
-This installs the module and adds it to `nuxt.config.ts`. `<FunLoader>` is then available in every component, with no import:
+This installs the module and adds it to `nuxt.config.ts`. It needs Nuxt 4 or later. `<FunLoader>` is then available in every component, with no import:
 
 ```vue
 <script setup>
