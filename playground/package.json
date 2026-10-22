@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "name": "nuxt-fun-loader-playground",
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@vectorchi/nuxt-fun-loader": "file:..",
+    "nuxt": "^4.6.2"
+  }
+}
