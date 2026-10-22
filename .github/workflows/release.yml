@@ -34,6 +34,15 @@ jobs:
       - run: npm run prepack
       # Trusted publishing needs npm 11.5.1+; don't rely on the version bundled with Node.
       - run: npm install -g npm@latest && npm --version
+      # A version published by hand (like 0.1.0) only needs its tag, not a second publish.
+      - name: Check whether this version is already on npm
+        id: published
+        run: |
+          if npm view "$(node -p "require('./package.json').name")@${GITHUB_REF_NAME#v}" version >/dev/null 2>&1; then
+            echo "::notice::${GITHUB_REF_NAME#v} is already on npm, skipping publish"
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          fi
       # Staged: nothing goes live until a maintainer approves it with 2FA on npmjs.com.
       # Provenance comes from publishConfig.provenance in package.json.
-      - run: npm stage publish --loglevel verbose
+      - if: steps.published.outputs.exists != 'true'
+        run: npm stage publish --loglevel verbose

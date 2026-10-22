@@ -65,7 +65,7 @@ The hydration check was tested by planting a mismatch (`import.meta.server` in t
 
 The first SSR run rendered `paused="false" iconOnly="false" ordered="false"`. Vue's server renderer writes `false` as text for attributes it does not know, and the element treats any `paused` or `ordered` attribute as on, so every server-rendered loader started paused and ordered until hydration. The component now passes `paused`, `icon-only` and `ordered` only when true (`|| undefined`), using the element's attribute name `icon-only`. On the client Vue sets them as properties, so switching back to false works; the SSR test covers both directions.
 
-The core `/vue` component has the same bug; see CORE-REQUESTS.md.
+The core `/vue` component had the same bug, fixed in core 0.5.1 (CORE-REQUESTS.md, item 0).
 
 ## Tree-shaking test and size
 
@@ -114,3 +114,7 @@ The tarball holds 11 files: `dist`, `package.json`, `README.md` and `LICENSE`.
 ## Description
 
 The nuxt/modules README asks that a module's description not mention Nuxt or its versions, and `pnpm sync` copies the description from `package.json`. So the `package.json` description leaves Nuxt out, and `nuxt` and `nuxt-module` are in `keywords` for npm search.
+
+## First publish by hand; later ones from CI
+
+v0.1.0 was published from a laptop with `npm publish --provenance=false` on 2026-10-22, because trusted publishing can only be set up once a package exists. So 0.1.0 has no provenance. The release workflow skips the publish step when the tagged version is already on npm, so tagging `v0.1.0` to mark the release does not fail.

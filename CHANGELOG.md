@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Requires `@vectorchi/fun-loader` 0.5.1, which fixes the same server-rendering bug in the core Vue component.
+- README: the fun-loader logo.
+
 ## 0.1.0
 
 First release.
@@ -9,4 +14,4 @@ First release.
 - `funLoader.defaults` sets `theme`, `icon`, `interval` and `label` for every `<FunLoader>`.
 - `funLoader.prefix` renames the component (`<prefix>Loader`).
 - Server-rendered with no hydration warnings. Booleans that are off are not written to the server HTML, so loaders don't start paused or ordered before hydration.
-- Requires Nuxt 4 and `@vectorchi/fun-loader` 0.5.
+- Requires Nuxt 4 and `@vectorchi/fun-loader` 0.5.0 or later.
