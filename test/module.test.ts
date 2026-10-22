@@ -54,12 +54,6 @@ describe('module setup', () => {
     expect(defaults).toEqual({ theme: 'calm', icon: 'orbit', interval: 3000, label: 'Saving' })
   })
 
-  it('rejects unknown theme names', async () => {
-    // @ts-expect-error: not a bundled theme
-    await expect(setupModule({ funLoader: { themes: ['thinkng'] } })).rejects.toThrow(/Unknown theme "thinkng"/)
-    await expect(setupModule({ funLoader: { themes: [] } })).rejects.toThrow(/non-empty list/)
-  })
-
   it('registers the component as FunLoader, or with a custom prefix', async () => {
     const ours = (components: Component[]) => components.filter(c => c.filePath.includes('FunLoader')).map(c => c.pascalName)
     expect(ours((await setupModule()).components)).toEqual(['FunLoader'])
@@ -77,5 +71,13 @@ describe('module setup', () => {
     expect(isCustomElement('ion-button')).toBe(true)
     expect(isCustomElement('fun-loader')).toBe(true)
     expect(isCustomElement('div')).toBe(false)
+  })
+
+  // Last on purpose: on Nuxt 4.0, a load that throws stays the current Nuxt context, and
+  // loads after it would set up the wrong instance.
+  it('rejects unknown theme names', async () => {
+    // @ts-expect-error: not a bundled theme
+    await expect(setupModule({ funLoader: { themes: ['thinkng'] } })).rejects.toThrow(/Unknown theme "thinkng"/)
+    await expect(setupModule({ funLoader: { themes: [] } })).rejects.toThrow(/non-empty list/)
   })
 })

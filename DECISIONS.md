@@ -83,3 +83,19 @@ These are differences of whole compressed builds, so they are close to, not exac
 ## Browser for the E2E test
 
 `@nuxt/test-utils` drives Playwright. CI installs Playwright's Chromium. Locally, `CHROMIUM_PATH` can point at any installed Chromium-based browser, so nobody has to download one just to run the tests.
+
+## CI on Nuxt 4.0 and the newest 4.x
+
+The matrix installs `nuxt@4.0` or `nuxt@4` over the lockfile (`npm install --no-save`) and runs prepare, lint, typecheck, tests (including the E2E test in Playwright's Chromium) and the module build. `@nuxt/kit` stays at the version in the lockfile, as it would in a user's app: the guide asks modules to use the latest Kit, which supports older Nuxt versions.
+
+Running the 4.0 leg locally before CI turned up three things:
+
+- The playground pinned its own `nuxt ^4.6.2`, so the matrix ran two Nuxt versions at once and `nuxt prepare playground` failed. The playground now uses the root's Nuxt.
+- On Nuxt 4.0, a `loadNuxt` that throws stays the current Nuxt context, so the setup tests that ran after the "rejects unknown theme names" case set up the wrong instance. That case now runs last. A real build stops at the error, so apps are not affected.
+- `scripts/size.ts` imports `../test/build.ts`, which Node's type stripping needs and TypeScript allows only with `allowImportingTsExtensions`. Nuxt 4.6's generated tsconfig turns it on; 4.0's does not, so the root tsconfig sets it.
+
+With those fixed, every step passes on Nuxt 4.0.3 and 4.6.2, including the playground build.
+
+## Release workflow
+
+`.github/workflows/release.yml` runs on a `v*` tag, the same way as the core's: it checks that the tag matches `package.json`, runs every check, then `npm stage publish` with OIDC trusted publishing. A staged version goes live only after a maintainer approves it with 2FA on npmjs.com. Provenance is set in `publishConfig`, and `repository` matches the GitHub repo, which provenance requires. The workflow is not triggered by anything in this repo until a tag is pushed.

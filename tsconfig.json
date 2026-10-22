@@ -1,5 +1,9 @@
 {
   "extends": "./.nuxt/tsconfig.json",
+  "compilerOptions": {
+    // scripts/size.ts runs on Node with type stripping, which needs .ts in import paths.
+    "allowImportingTsExtensions": true,
+  },
   "exclude": [
     "dist",
     "node_modules",

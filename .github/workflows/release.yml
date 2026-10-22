@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  id-token: write # lets npm verify this workflow via OIDC (trusted publishing) and sign provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # No caching in release builds.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - name: Check tag matches package.json version
+        run: |
+          version="v$(node -p "require('./package.json').version")"
+          if [ "$version" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match package.json version $version"
+            exit 1
+          fi
+      - run: npm ci
+      - run: npx playwright-core install --with-deps chromium
+      - run: npm run dev:prepare
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run prepack
+      # Trusted publishing needs npm 11.5.1+; don't rely on the version bundled with Node.
+      - run: npm install -g npm@latest && npm --version
+      # Staged: nothing goes live until a maintainer approves it with 2FA on npmjs.com.
+      # Provenance comes from publishConfig.provenance in package.json.
+      - run: npm stage publish --loglevel verbose

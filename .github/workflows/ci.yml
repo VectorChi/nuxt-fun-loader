@@ -1,49 +1,31 @@
-name: ci
+name: CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
 
 jobs:
-  lint:
+  check:
     runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: false
+      matrix:
+        # The oldest Nuxt that meta.compatibility allows, and the newest 4.x.
+        nuxt: ['4.0', '4']
+    name: Nuxt ${{ matrix.nuxt }}
     steps:
-      - uses: actions/checkout@v7
-
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 24.21.0
-
-      - run: npm i -g --force corepack@latest && corepack enable
-
-      - name: Install dependencies
-        run: npx nypm@latest i
-
-      - name: Lint
-        run: npm run lint
-
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v7
-
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 24.21.0
-
-      - run: npm i -g --force corepack@latest && corepack enable
-
-      - name: Install dependencies
-        run: npx nypm@latest i
-
-      - name: Playground prepare
-        run: npm run dev:prepare
-
-      - name: Test
-        run: npm run test
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Use Nuxt ${{ matrix.nuxt }}
+        run: npm install --no-save nuxt@${{ matrix.nuxt }} && npx nuxt --version
+      - run: npx playwright-core install --with-deps chromium
+      - run: npm run dev:prepare
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run prepack
