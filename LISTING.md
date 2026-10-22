@@ -13,7 +13,7 @@ description: >-
   only the themes you use in the bundle.
 repo: VectorChi/nuxt-fun-loader
 npm: '@vectorchi/nuxt-fun-loader'
-icon: ''
+icon: fun-loader.svg
 github: https://github.com/VectorChi/nuxt-fun-loader
 website: https://vectorchi.github.io/fun-loader/
 learn_more: https://vectorchi.github.io/fun-loader/frameworks/nuxt
@@ -22,12 +22,13 @@ type: 3rd-party
 maintainers:
   - name: Adimchi Oka
     github: VectorChi
+    twitter: vector_chi
 compatibility:
   nuxt: '>=4.0.0'
   requires: {}
 ```
 
-Set by hand: `website`, `learn_more`, `category` (the sync picked `Devtools`) and the maintainer's name. Everything else comes from the sync.
+Set by hand: `website`, `learn_more`, `category` (the sync picked `Devtools`), the maintainer's name and `icon` (the core docs logo, `docs/public/logo.svg`, added as `icons/fun-loader.svg`). Their CI added `twitter: vector_chi` from the GitHub profile. Everything else comes from the sync.
 
 ## What changed from the first draft
 
@@ -46,5 +47,4 @@ Title: `feat: add fun-loader` (the convention in merged PRs, for example "feat: 
 
 ## Optional later
 
-- An icon in `icons/` (set `icon:` in the file).
 - A StackBlitz demo linked from the README, which the module guide recommends.
