@@ -1,6 +1,6 @@
 export default defineNuxtConfig({
-  modules: ['my-module'],
+  modules: ['@vectorchi/nuxt-fun-loader'],
   devtools: { enabled: true },
   compatibilityDate: 'latest',
-  myModule: {},
+  funLoader: {},
 })

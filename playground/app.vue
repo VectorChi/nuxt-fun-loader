@@ -1,8 +1,6 @@
 <template>
   <div>
-    Nuxt module playground!
+    <FunLoader />
+    <fun-loader theme="dev" />
   </div>
 </template>
-
-<script setup>
-</script>
