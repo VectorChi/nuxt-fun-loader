@@ -99,3 +99,18 @@ With those fixed, every step passes on Nuxt 4.0.3 and 4.6.2, including the playg
 ## Release workflow
 
 `.github/workflows/release.yml` runs on a `v*` tag, the same way as the core's: it checks that the tag matches `package.json`, runs every check, then `npm stage publish` with OIDC trusted publishing. A staged version goes live only after a maintainer approves it with 2FA on npmjs.com. Provenance is set in `publishConfig`, and `repository` matches the GitHub repo, which provenance requires. The workflow is not triggered by anything in this repo until a tag is pushed.
+
+## Install check: `nuxi module add`
+
+Tried on 2026-10-22 in a fresh app from `nuxi init --template minimal` (Nuxt 4.6.2): `npx nuxi module add @vectorchi/nuxt-fun-loader` stops with "Failed to fetch package details for @vectorchi/nuxt-fun-loader. Request to registry.npmjs.org failed with status 404." That is expected: the command reads the package from npm, and nothing is published yet. There is nothing to fix in the module. Run it again after the first publish.
+
+What the command would do, installing the package and adding it to `modules`, was checked by hand with the packed tarball (`npm pack`):
+
+- **npm:** the fresh app builds, and the server renders `<fun-loader theme="kitchen">` with `funLoader.themes: ['kitchen']` (the first listed theme became the default).
+- **pnpm 9 (strict layout):** the same app builds and renders the same HTML. The core package is not hoisted to the app's `node_modules`, so this confirms the plugin's resolved import paths are needed and work.
+
+The tarball holds 11 files: `dist`, `package.json`, `README.md` and `LICENSE`.
+
+## Description
+
+The nuxt/modules README asks that a module's description not mention Nuxt or its versions, and `pnpm sync` copies the description from `package.json`. So the `package.json` description leaves Nuxt out, and `nuxt` and `nuxt-module` are in `keywords` for npm search.

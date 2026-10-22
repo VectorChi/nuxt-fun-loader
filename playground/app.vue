@@ -55,9 +55,9 @@
         />
       </div>
       <div class="demo">
-        <code>:messages ordered</code>
+        <code>:messages="steps" ordered</code>
         <FunLoader
-          :messages="['Checking your cart…', 'Reserving your seats…', 'Almost done…']"
+          :messages="steps"
           ordered
         />
       </div>
@@ -100,6 +100,8 @@
 import { computed, inject, onBeforeUnmount, ref } from 'vue'
 import { DEFAULTS_KEY } from '../src/runtime/app/defaults'
 
+// A constant, not an inline array: a new array on every render restarts the rotation.
+const steps = ['Checking your cart…', 'Reserving your seats…', 'Finishing up…']
 const themes = ['thinking', 'dev', 'design', 'art', 'calm', 'finance', 'kitchen', 'transfer']
 // What the module's plugin provides from funLoader.defaults.
 const defaultsText = JSON.stringify(inject(DEFAULTS_KEY, {}))
