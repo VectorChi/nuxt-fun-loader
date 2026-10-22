@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.1.1
 
 - Requires `@vectorchi/fun-loader` 0.5.1, which fixes the same server-rendering bug in the core Vue component.
 - README: the fun-loader logo.
