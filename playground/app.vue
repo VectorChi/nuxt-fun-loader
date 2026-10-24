@@ -45,6 +45,21 @@
     </section>
 
     <section>
+      <h2>Icons</h2>
+      <div
+        v-for="icon in icons"
+        :key="icon"
+        class="demo theme"
+      >
+        <code>{{ icon }}</code>
+        <FunLoader
+          theme="calm"
+          :icon="icon"
+        />
+      </div>
+    </section>
+
+    <section>
       <h2>Per-loader overrides</h2>
       <div class="demo">
         <code>icon="globe" :interval="1200"</code>
@@ -98,11 +113,13 @@
 
 <script setup lang="ts">
 import { computed, inject, onBeforeUnmount, ref } from 'vue'
+import { ICONS } from '@vectorchi/fun-loader/element'
 import { DEFAULTS_KEY } from '../src/runtime/app/defaults'
 
 // A constant, not an inline array: a new array on every render restarts the rotation.
 const steps = ['Checking your cart…', 'Reserving your seats…', 'Finishing up…']
 const themes = ['thinking', 'dev', 'design', 'art', 'calm', 'finance', 'kitchen', 'transfer']
+const icons = ICONS
 // What the module's plugin provides from funLoader.defaults.
 const defaultsText = JSON.stringify(inject(DEFAULTS_KEY, {}))
 
